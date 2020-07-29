@@ -2,6 +2,8 @@
 
 Discord webhook plugin for CTFd to announce challenge solves! Can be configured with a custom message, and a limit to only announce the first N solves.
 
+Functionality made for UIUCTF 2020
+
 ## Setup
 1. Clone this repo into a folder in the plugin folder of your CTFd
 2. Create a new Webhook in your discord server
