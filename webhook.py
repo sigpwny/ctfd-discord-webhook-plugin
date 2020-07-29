@@ -31,9 +31,7 @@ def load(app):
 
             if isinstance(result, JSONMixin):
                 data = result.json
-                print(repr(data))
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("status") == "correct":
-                    print("congrats! correct!")
                     if request.content_type != "application/json":
                         request_data = request.form
                     else:
