@@ -8,6 +8,8 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 from functools import wraps
 from .config import config
 
+import re
+
 ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
 sanreg = re.compile(r'(~|!|@|#|\$|%|\^|&|\*|\(|\)|\_|\+|\`|-|=|\[|\]|;|\'|,|\.|\/|\{|\}|\||:|"|<|>|\?)')
 sanitize = lambda m: sanreg.sub(r'\1',m)
