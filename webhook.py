@@ -55,6 +55,12 @@ def load(app):
                     user = get_current_user()
                     team = get_current_team()
 
+		    if team is None:
+		    	class Team:
+				def __init__(self):
+					self.name = ""
+			team = Team()
+
                     format_args = {
                         "team": sanitize(team.name),
                         "user": sanitize(user.name),
