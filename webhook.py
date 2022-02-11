@@ -56,7 +56,7 @@ def load(app):
                     team = get_current_team()
 
                     format_args = {
-                        "team": sanitize(team.name),
+                        "team": sanitize("" if team is None else team.name),
                         "user": sanitize(user.name),
                         "challenge": sanitize(challenge.name),
                         "solves": num_solves,
