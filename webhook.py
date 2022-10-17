@@ -71,5 +71,41 @@ def load(app):
             return result
         return wrapper
 
+    def challenge_list_decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            result = f(*args, **kwargs)
+
+            print(f"WEBHOOK Handling data: {result}")
+
+            if not ctftime():
+                return result
+
+            if request.method != "POST":
+                print(f"REQUEST WAS {request.method}")
+                return result 
+
+            if isinstance(result, JSONMixin):
+                data = result.json
+                if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("state") == "hidden":            
+                    webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
+
+                    # For this route, the challenge data is returned on success. We can therefore grab it directly:
+
+                    challenge = data.get("data")
+
+                    format_args = {
+                        "challenge": sanitize(challenge.name),
+                        "category": sanitize(challenge.category)
+                    }
+
+                    message = app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'].format(**format_args)
+                    embed = DiscordEmbed(description=message)
+                    webhook.add_embed(embed)
+                    webhook.execute()
+            return result
+        return wrapper
+
     app.view_functions['api.challenges_challenge_attempt'] = challenge_attempt_decorator(app.view_functions['api.challenges_challenge_attempt'])
+    app.view_functions['api.challenges_challenge_list'] = challenge_list_decorator(app.view_functions['api.challenges_challenge_list'])
  

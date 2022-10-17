@@ -16,3 +16,8 @@ def config(app):
     '''
     app.config['DISCORD_WEBHOOK_MESSAGE'] = environ.get('DISCORD_WEBHOOK_MESSAGE', 'Congratulations to team {team} for the {fsolves} solve on challenge {challenge}!')
 
+    '''
+    Webhook message format string. Valid vars: team, user, solves, fsolves (formatted solves), challenge, category
+    '''
+    app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'] = environ.get('DISCORD_WEBHOOK_CHALL_MESSAGE', 'Challenge {challenge} has been created!')
+
