@@ -27,7 +27,7 @@ def config(app):
     app.config['DISCORD_WEBHOOK_CHALL_UPDATE'] = environ.get('DISCORD_WEBHOOK_CHALL_UPDATE', False)
 
     '''
-    Post webhook message even if challenge has not yet been published
+    Post webhook message even if challenge has not yet been published (only relevant when update is enabled)
     '''
     app.config['DISCORD_WEBHOOK_CHALL_UNPUBLISHED'] = environ.get('DISCORD_WEBHOOK_CHALL_UNPUBLISHED', False)
 
