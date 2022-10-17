@@ -81,7 +81,7 @@ def load(app):
             if request.method != "PATCH":
                 return f(*args, **kwargs)
 
-            # CHeck if feature is disabled
+            # Check if feature is disabled
             if not app.config['DISCORD_WEBHOOK_CHALL']:
                 return f(*args, **kwargs)
 
