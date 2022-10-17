@@ -86,10 +86,7 @@ def load(app):
                 return f(*args, **kwargs)
 
             # Check if challenge was visible beforehand (check if published/updated)
-            print("FLASK ARGS")
-            print(args)
-            print(kwargs)
-            challenge_id=1
+            challenge_id = kwargs.get("challenge_id")
             challenge_old = Challenges.query.filter_by(id=challenge_id).first_or_404()
 
             # Run original route function
@@ -97,7 +94,6 @@ def load(app):
 
             if isinstance(result, JSONMixin):
                 data = result.json
-                print(f"WEBHOOK Handling data: {data}")
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict):
                     # For this route, the updated challenge data is returned on success, so we grab it directly:
                     challenge = data.get("data")
