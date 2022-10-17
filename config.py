@@ -7,7 +7,7 @@ def config(app):
     app.config['DISCORD_WEBHOOK_URL'] = environ.get('DISCORD_WEBHOOK_URL')
 
     '''
-    Limit on number of solves for challenge to trigger webhook for. Set to None to send a message for every solve.
+    Limit on number of solves for challenge to trigger webhook for. Set to 0 to send a message for every solve.
     '''
     app.config['DISCORD_WEBHOOK_LIMIT'] = environ.get('DISCORD_WEBHOOK_LIMIT', '3')
 
