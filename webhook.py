@@ -88,6 +88,7 @@ def load(app):
             # Check if challenge was visible beforehand (check if published/updated)
             challenge_id = kwargs.get("challenge_id")
             challenge_old = Challenges.query.filter_by(id=challenge_id).first_or_404()
+            challenge_old_state = challenge_old.state
 
             # Run original route function
             result = f(*args, **kwargs)
@@ -100,10 +101,10 @@ def load(app):
 
                     print("DEBUG")
                     print(challenge)
-                    print(challenge_old.state)
+                    print(challenge_old_state)
 
                     # Check whether challenge was published,hidden or updated
-                    if challenge_old.state != challenge.get("state"):
+                    if challenge_old_state != challenge.get("state"):
                         if challenge.get("state") == "hidden":
                             action = "hidden"
                         else:
