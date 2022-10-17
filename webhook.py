@@ -76,6 +76,10 @@ def load(app):
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
 
+            # Make sure request type is "PATCH" https://docs.ctfd.io/docs/api/redoc#tag/challenges/operation/patch_challenge
+            if request.method != "PATCH":
+                return result
+
             if not ctftime():
                 return result
 
@@ -101,5 +105,5 @@ def load(app):
         return wrapper
 
     app.view_functions['api.challenges_challenge_attempt'] = challenge_attempt_decorator(app.view_functions['api.challenges_challenge_attempt'])
-    app.view_functions['api.challenges_patch_challenge'] = patch_challenge_decorator(app.view_functions['api.challenges_patch_challenge'])
+    app.view_functions['api.challenges_challenge'] = patch_challenge_decorator(app.view_functions['api.challenges_challenge'])
  
