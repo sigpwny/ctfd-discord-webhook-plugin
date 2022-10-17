@@ -78,7 +78,7 @@ def load(app):
                 return f(*args, **kwargs)
 
             # CHeck if feature is disabled
-            if not app.config('DISCORD_WEBHOOK_CHALL'):
+            if not app.config['DISCORD_WEBHOOK_CHALL']:
                 return f(*args, **kwargs)
 
             # Make sure request type is "PATCH" https://docs.ctfd.io/docs/api/redoc#tag/challenges/operation/patch_challenge
@@ -114,10 +114,10 @@ def load(app):
                         action = "updated"
 
                     # Make sure the challenge is visible, action is hidden, or override is configured
-                    if not (data.get("data").get("state") == "visible" or action == "hidden" or app.config('DISCORD_WEBHOOK_CHALL_UNPUBLISHED')):
+                    if not (data.get("data").get("state") == "visible" or action == "hidden" or app.config['DISCORD_WEBHOOK_CHALL_UNPUBLISHED']):
                         return result
 
-                    if action == "updated" and not app.config('DISCORD_WEBHOOK_CHALL_UPDATE'):
+                    if action == "updated" and not app.config['DISCORD_WEBHOOK_CHALL_UPDATE']:
                         return result
 
                     format_args = {
