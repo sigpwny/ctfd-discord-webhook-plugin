@@ -74,29 +74,59 @@ def load(app):
     def patch_challenge_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            result = f(*args, **kwargs)
+            if not ctftime():
+                return f(*args, **kwargs)
+
+            # CHeck if feature is disabled
+            if not app.config('DISCORD_WEBHOOK_CHALL'):
+                return f(*args, **kwargs)
 
             # Make sure request type is "PATCH" https://docs.ctfd.io/docs/api/redoc#tag/challenges/operation/patch_challenge
             if request.method != "PATCH":
-                return result
+                return f(*args, **kwargs)
 
-            if not ctftime():
-                return result
+            # Check if challenge was visible beforehand (check if published/updated)
+            if request.content_type != "application/json":
+                request_data = request.form
+            else:
+                request_data = request.get_json()
+
+            challenge_id = request_data.get("challenge_id")
+            challenge_old = Challenges.query.filter_by(id=challenge_id).first_or_404()
+
+            # Run original route function
+            result = f(*args, **kwargs)
 
             if isinstance(result, JSONMixin):
                 data = result.json
                 print(f"WEBHOOK Handling data: {data}")
-                if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("state") == "hidden":            
-                    webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
-
-                    # For this route, the challenge data is returned on success. We can therefore grab it directly:
+                if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict):
+                    # For this route, the updated challenge data is returned on success, so we grab it directly:
                     challenge = data.get("data")
 
+                    # Check whether challenge was published,hidden or updated
+                    if challenge_old.state != challenge.get("state"):
+                        if challenge.get("state") == "hidden":
+                            action = "hidden"
+                        else:
+                            action = "published"
+                    else:
+                        action = "updated"
+
+                    # Make sure the challenge is visible, action is hidden, or override is configured
+                    if not (data.get("data").get("state") == "visible" or action == "hidden" or app.config('DISCORD_WEBHOOK_CHALL_UNPUBLISHED')):
+                        return result
+
+                    if action == "updated" and not app.config('DISCORD_WEBHOOK_CHALL_UPDATE'):
+                        return result
+
                     format_args = {
-                        "challenge": sanitize(challenge["name"]),
-                        "category": sanitize(challenge["category"])
+                        "challenge": sanitize(challenge.get("name")),
+                        "category": sanitize(challenge.get("category")),
+                        "action": sanitize(action)
                     }
 
+                    webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
                     message = app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'].format(**format_args)
                     embed = DiscordEmbed(description=message)
                     webhook.add_embed(embed)
