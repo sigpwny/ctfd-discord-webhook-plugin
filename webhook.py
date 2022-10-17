@@ -86,14 +86,10 @@ def load(app):
                 return f(*args, **kwargs)
 
             # Check if challenge was visible beforehand (check if published/updated)
-            if request.content_type != "application/json":
-                request_data = request.form
-            else:
-                request_data = request.get_json()
-
-            print(request_data)
-
-            challenge_id = request_data.get("challenge_id")
+            print("FLASK ARGS")
+            print(args)
+            print(kwargs)
+            challenge_id=1
             challenge_old = Challenges.query.filter_by(id=challenge_id).first_or_404()
 
             # Run original route function
