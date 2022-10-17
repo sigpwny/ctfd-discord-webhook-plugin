@@ -76,8 +76,6 @@ def load(app):
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
 
-            print(f"WEBHOOK Handling data: {result}")
-
             if not ctftime():
                 return result
 
@@ -87,6 +85,7 @@ def load(app):
 
             if isinstance(result, JSONMixin):
                 data = result.json
+                print(f"WEBHOOK Handling data: {data}")
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("state") == "hidden":            
                     webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
 
