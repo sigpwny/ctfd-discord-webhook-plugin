@@ -98,6 +98,10 @@ def load(app):
                     # For this route, the updated challenge data is returned on success, so we grab it directly:
                     challenge = data.get("data")
 
+                    print("DEBUG")
+                    print(challenge)
+                    print(challenge_old.state)
+
                     # Check whether challenge was published,hidden or updated
                     if challenge_old.state != challenge.get("state"):
                         if challenge.get("state") == "hidden":
