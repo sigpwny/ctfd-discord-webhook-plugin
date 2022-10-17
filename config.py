@@ -32,6 +32,6 @@ def config(app):
     app.config['DISCORD_WEBHOOK_CHALL_UNPUBLISHED'] = environ.get('DISCORD_WEBHOOK_CHALL_UNPUBLISHED', False)
 
     '''
-    Webhook challenge update format string. Valid vars: challenge, category, action (published, hidden or updated)
+    Webhook challenge change format string. Valid vars: challenge, category, action (published, hidden or updated)
     '''
     app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'] = environ.get('DISCORD_WEBHOOK_CHALL_MESSAGE', 'Challenge {challenge} has been {action}!')
