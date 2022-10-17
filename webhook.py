@@ -79,8 +79,8 @@ def load(app):
             if not ctftime():
                 return result
 
-            if request.method != "POST":
-                print(f"REQUEST WAS {request.method}")
+            # Only handle post requests
+            if request.method != "POST": 
                 return result 
 
             if isinstance(result, JSONMixin):
@@ -90,12 +90,11 @@ def load(app):
                     webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
 
                     # For this route, the challenge data is returned on success. We can therefore grab it directly:
-
                     challenge = data.get("data")
 
                     format_args = {
-                        "challenge": sanitize(challenge.name),
-                        "category": sanitize(challenge.category)
+                        "challenge": sanitize(challenge["name"]),
+                        "category": sanitize(challenge["category"])
                     }
 
                     message = app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'].format(**format_args)
