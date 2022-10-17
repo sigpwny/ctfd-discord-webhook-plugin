@@ -77,12 +77,12 @@ def load(app):
             if not ctftime():
                 return f(*args, **kwargs)
 
-            # CHeck if feature is disabled
-            if not app.config['DISCORD_WEBHOOK_CHALL']:
-                return f(*args, **kwargs)
-
             # Make sure request type is "PATCH" https://docs.ctfd.io/docs/api/redoc#tag/challenges/operation/patch_challenge
             if request.method != "PATCH":
+                return f(*args, **kwargs)
+
+            # CHeck if feature is disabled
+            if not app.config['DISCORD_WEBHOOK_CHALL']:
                 return f(*args, **kwargs)
 
             # Check if challenge was visible beforehand (check if published/updated)
@@ -90,6 +90,8 @@ def load(app):
                 request_data = request.form
             else:
                 request_data = request.get_json()
+
+            print(request_data)
 
             challenge_id = request_data.get("challenge_id")
             challenge_old = Challenges.query.filter_by(id=challenge_id).first_or_404()
