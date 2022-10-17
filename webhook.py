@@ -71,17 +71,13 @@ def load(app):
             return result
         return wrapper
 
-    def challenge_list_decorator(f):
+    def patch_challenge_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
 
             if not ctftime():
                 return result
-
-            # Only handle post requests
-            if request.method != "POST": 
-                return result 
 
             if isinstance(result, JSONMixin):
                 data = result.json
@@ -105,5 +101,5 @@ def load(app):
         return wrapper
 
     app.view_functions['api.challenges_challenge_attempt'] = challenge_attempt_decorator(app.view_functions['api.challenges_challenge_attempt'])
-    app.view_functions['api.challenges_challenge_list'] = challenge_list_decorator(app.view_functions['api.challenges_challenge_list'])
+    app.view_functions['api.challenges_patch_challenge'] = patch_challenge_decorator(app.view_functions['api.challenges_patch_challenge'])
  
