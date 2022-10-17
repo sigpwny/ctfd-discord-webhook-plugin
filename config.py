@@ -19,7 +19,7 @@ def config(app):
     '''
     Post webhook message when challenge is changed (published, hidden or updated)
     '''
-    app.config['DISCORD_WEBHOOK_CHALL'] = environ.get('DISCORD_WEBHOOK_CHALL_MESSAGE', True)
+    app.config['DISCORD_WEBHOOK_CHALL'] = environ.get('DISCORD_WEBHOOK_CHALL', True)
 
     '''
     Post webhook message when challenge is updated (otherwise only published or hidden)
