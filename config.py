@@ -7,12 +7,31 @@ def config(app):
     app.config['DISCORD_WEBHOOK_URL'] = environ.get('DISCORD_WEBHOOK_URL')
 
     '''
-    Limit on number of solves for challenge to trigger webhook for. Set to None to send a message for every solve.
+    Limit on number of solves for challenge to trigger webhook for. Set to 0 to send a message for every solve.
     '''
     app.config['DISCORD_WEBHOOK_LIMIT'] = environ.get('DISCORD_WEBHOOK_LIMIT', '3')
 
     '''
-    Webhook message format string. Valid vars: team, user, solves, fsolves (formatted solves), challenge, category
+    Webhook flag submission format string. Valid vars: team, user, solves, fsolves (formatted solves), challenge, category
     '''
     app.config['DISCORD_WEBHOOK_MESSAGE'] = environ.get('DISCORD_WEBHOOK_MESSAGE', 'Congratulations to team {team} for the {fsolves} solve on challenge {challenge}!')
 
+    '''
+    Post webhook message when challenge is changed (published, hidden or updated)
+    '''
+    app.config['DISCORD_WEBHOOK_CHALL'] = environ.get('DISCORD_WEBHOOK_CHALL', True)
+
+    '''
+    Post webhook message when challenge is updated (otherwise only published or hidden)
+    '''
+    app.config['DISCORD_WEBHOOK_CHALL_UPDATE'] = environ.get('DISCORD_WEBHOOK_CHALL_UPDATE', False)
+
+    '''
+    Post webhook message even if challenge has not yet been published (only relevant when update is enabled)
+    '''
+    app.config['DISCORD_WEBHOOK_CHALL_UNPUBLISHED'] = environ.get('DISCORD_WEBHOOK_CHALL_UNPUBLISHED', False)
+
+    '''
+    Webhook challenge change format string. Valid vars: challenge, category, action (published, hidden or updated)
+    '''
+    app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'] = environ.get('DISCORD_WEBHOOK_CHALL_MESSAGE', 'Challenge {challenge} has been {action}!')
