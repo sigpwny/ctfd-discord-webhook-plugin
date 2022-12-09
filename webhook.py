@@ -22,16 +22,12 @@ def load(app):
     if not app.config['DISCORD_WEBHOOK_URL']:
         print("No DISCORD_WEBHOOK_URL set! Plugin disabled.")
         return
-    print("Loading plugin discord webhook!!")
-
     def challenge_attempt_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
-
             if not ctftime():
                 return result
-
             if isinstance(result, JSONMixin):
                 data = result.json
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("status") == "correct":
@@ -49,8 +45,8 @@ def load(app):
                     num_solves = solvers.count()
 
                     limit = app.config["DISCORD_WEBHOOK_LIMIT"]
-                    if limit and num_solves > int(limit):
-                        return result 
+                    if int(limit) > 0 and num_solves > int(limit):
+                        return result
                     webhook = DiscordWebhook(url=app.config['DISCORD_WEBHOOK_URL'])
 
                     user = get_current_user()
@@ -59,7 +55,7 @@ def load(app):
                     format_args = {
                         "team": sanitize("" if team is None else team.name),
                         "user_id": user.id,
-                        "team_id": team.id,
+                        "team_id": 0 if team is None else team.id,
                         "user": sanitize(user.name),
                         "challenge": sanitize(challenge.name),
                         "challenge_slug": quote(challenge.name),
