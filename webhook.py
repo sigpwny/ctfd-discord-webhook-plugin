@@ -59,6 +59,7 @@ def load(app):
                         "user": sanitize(user.name),
                         "challenge": sanitize(challenge.name),
                         "challenge_slug": quote(challenge.name),
+                        "value": challenge.value,
                         "solves": num_solves,
                         "fsolves": ordinal(num_solves),
                         "category": sanitize(challenge.category)
