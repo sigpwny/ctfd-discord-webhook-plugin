@@ -9,6 +9,7 @@ from functools import wraps
 from .config import config
 
 import re
+from urllib.parse import quote
 
 ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
 sanreg = re.compile(r'(~|!|@|#|\$|%|\^|&|\*|\(|\)|\_|\+|\`|-|=|\[|\]|;|\'|,|\.|\/|\{|\}|\||:|"|<|>|\?)')
@@ -61,6 +62,7 @@ def load(app):
                         "team_id": team.id,
                         "user": sanitize(user.name),
                         "challenge": sanitize(challenge.name),
+                        "challenge_slug": quote(challenge.name),
                         "solves": num_solves,
                         "fsolves": ordinal(num_solves),
                         "category": sanitize(challenge.category)
