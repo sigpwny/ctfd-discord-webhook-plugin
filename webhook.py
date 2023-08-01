@@ -1,5 +1,5 @@
 from flask import request
-from werkzeug.wrappers.json import JSONMixin
+from flask.wrappers import Response
 from CTFd.utils.dates import ctftime
 from CTFd.models import Challenges, Solves
 from CTFd.utils import config as ctfd_config
@@ -28,7 +28,7 @@ def load(app):
             result = f(*args, **kwargs)
             if not ctftime():
                 return result
-            if isinstance(result, JSONMixin):
+            if isinstance(result, Response):
                 data = result.json
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict) and data.get("data").get("status") == "correct":
                     if request.content_type != "application/json":
@@ -94,7 +94,7 @@ def load(app):
             # Run original route function
             result = f(*args, **kwargs)
 
-            if isinstance(result, JSONMixin):
+            if isinstance(result, Response):
                 data = result.json
                 if isinstance(data, dict) and data.get("success") == True and isinstance(data.get("data"), dict):
                     # For this route, the updated challenge data is returned on success, so we grab it directly:
