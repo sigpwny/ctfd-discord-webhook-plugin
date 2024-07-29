@@ -10,6 +10,7 @@ from .config import config
 
 import re
 from urllib.parse import quote
+from types import SimpleNamespace
 
 ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
 sanreg = re.compile(r'(~|!|@|#|\$|%|\^|&|\*|\(|\)|\_|\+|\`|-|=|\[|\]|;|\'|,|\.|\/|\{|\}|\||:|"|<|>|\?)')
@@ -65,7 +66,12 @@ def load(app):
                         "category": sanitize(challenge.category)
                     }
 
-                    message = app.config['DISCORD_WEBHOOK_MESSAGE'].format(**format_args)
+                    # Add first blood support with a second message
+                    if app.config["DISCORD_WEBHOOK_INSECURE_FSTRING"]:
+                        data = SimpleNamespace(**format_args)
+                        message = eval("f'{}'".format(app.config['DISCORD_WEBHOOK_MESSAGE']))
+                    else:
+                        message = app.config['DISCORD_WEBHOOK_MESSAGE'].format(**format_args)
                     embed = DiscordEmbed(description=message)
                     webhook.add_embed(embed)
                     webhook.execute()

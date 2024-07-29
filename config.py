@@ -35,3 +35,10 @@ def config(app):
     Webhook challenge change format string. Valid vars: challenge, category, action (published, hidden or updated)
     '''
     app.config['DISCORD_WEBHOOK_CHALL_MESSAGE'] = environ.get('DISCORD_WEBHOOK_CHALL_MESSAGE', 'Challenge {challenge} has been {action}!')
+
+    '''
+    Turning this on turns your DISCORD_WEBHOOK_CHALL_MESSAGE into a f-string. Values can be accessed with data.<field>
+
+    This allows conditional formatting: e.g. {'FIRST BLOOD' if data.solves == 1 else ''}
+    '''
+    app.config['DISCORD_WEBHOOK_INSECURE_FSTRING'] = environ.get('DISCORD_WEBHOOK_INSECURE_FSTRING', False)
