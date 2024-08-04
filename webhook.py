@@ -67,9 +67,9 @@ def load(app):
                     }
 
                     # Add first blood support with a second message
-                    if app.config["DISCORD_WEBHOOK_INSECURE_FSTRING"]:
+                    if app.config["DISCORD_WEBHOOK_FSTRING"]:
                         data = SimpleNamespace(**format_args)
-                        message = eval("f'{}'".format(app.config['DISCORD_WEBHOOK_MESSAGE']))
+                        message = eval("f'{}'".format(app.config['DISCORD_WEBHOOK_MESSAGE'].replace("'", '"')))
                     else:
                         message = app.config['DISCORD_WEBHOOK_MESSAGE'].format(**format_args)
                     embed = DiscordEmbed(description=message)

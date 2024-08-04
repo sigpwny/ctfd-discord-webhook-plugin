@@ -41,4 +41,4 @@ def config(app):
 
     This allows conditional formatting: e.g. {'FIRST BLOOD' if data.solves == 1 else ''}
     '''
-    app.config['DISCORD_WEBHOOK_INSECURE_FSTRING'] = environ.get('DISCORD_WEBHOOK_INSECURE_FSTRING', False)
+    app.config['DISCORD_WEBHOOK_FSTRING'] = environ.get('DISCORD_WEBHOOK_FSTRING', False)
